@@ -1,5 +1,4 @@
 import Component from "../common/Component";
-import { $ } from "../utils/dom";
 import { logo } from "../assets/image";
 
 interface HeaderProps {
@@ -8,7 +7,7 @@ interface HeaderProps {
 }
 
 class Header extends Component<HeaderProps> {
-  private formElement: HTMLFormElement | null = $<HTMLFormElement>("#search-form");
+  private formElement: HTMLFormElement | null = document.querySelector<HTMLFormElement>("#search-form");
 
   protected getTemplate() {
     return /*html*/ `
@@ -31,33 +30,35 @@ class Header extends Component<HeaderProps> {
 
     const { onLogoClick, onSearchKeywordSubmit } = this.props;
 
-    $<HTMLHeadingElement>("#logo")?.addEventListener("click", () => {
+    document.querySelector<HTMLHeadingElement>("#logo")?.addEventListener("click", () => {
       onLogoClick();
       this.resetSearchForm();
     });
 
-    // const inputElment = $<HTMLInputElement>("#search-input");
-    const inputElment = document.querySelector<HTMLInputElement>("#search-input");
-    const searchForm = $<HTMLFormElement>(".search-form");
+    const $inputElment = document.querySelector<HTMLInputElement>("#search-input");
+    const $searchForm = document.querySelector<HTMLFormElement>(".search-form");
     const $logo = document.querySelector<HTMLHeadingElement>("#logo");
-    if (!inputElment || !searchForm || !$logo) return;
-    searchForm.addEventListener("submit", (e) => {
+    if (!$inputElment || !$searchForm || !$logo) return;
+    $searchForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const inputDisplay = getComputedStyle(inputElment).display;
-      if (inputDisplay === "inline-block") {
-        onSearchKeywordSubmit(inputElment.value);
-      } else if (inputDisplay === "none") {
+      if (!$searchForm.classList.contains("search-form-mobile")) {
+        if (!$inputElment.value) {
+          alert("검색어를 입력해주세요");
+          return;
+        }
+        onSearchKeywordSubmit($inputElment.value);
+      } else if ($searchForm.classList.contains("search-form-mobile")) {
         $logo.style.display = "none";
-        inputElment.style.display = "inline-block";
+        $searchForm.classList.remove("search-form-mobile");
       }
     });
 
     window.addEventListener("resize", () => {
       if (window.innerWidth < 500) {
-        inputElment.style.display = "none";
+        $searchForm.classList.add("search-form-mobile");
       } else {
+        $searchForm.classList.remove("search-form-mobile");
         $logo.style.display = "inline-block";
-        inputElment.style.display = "inline-block";
       }
     });
   }

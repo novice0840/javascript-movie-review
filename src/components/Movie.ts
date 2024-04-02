@@ -56,7 +56,6 @@ export const createMovieElement = ({ id, title, thumbnail, voteAverage }: MovieT
     if (!$modal) return;
     const movieDetail = await MovieClient.getMovieDetail(Number(listItem.id));
     $modal.innerHTML = /*html*/ `
-     <div class="modal-background"></div>
      <h3 class="movie-title">${movieDetail.title}</h3>
      <section>
         <img
@@ -80,9 +79,11 @@ export const createMovieElement = ({ id, title, thumbnail, voteAverage }: MovieT
     `;
     $modal.showModal();
     drawStarScore(id);
+    // document.body.style.overflow = "hidden";
     const $modalCloseButton = document.querySelector<HTMLButtonElement>(".modal-close-button");
     $modalCloseButton?.addEventListener("click", (e) => {
       e.preventDefault();
+      console.log("click close");
       $modal.close();
     });
     $modal.addEventListener("click", (e: MouseEvent) => {

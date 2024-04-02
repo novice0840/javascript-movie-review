@@ -65,6 +65,7 @@ button {
 .item-card {
   display: flex;
   flex-direction: column;
+  width: 180px;
 }
 
 .item-thumbnail {
@@ -81,6 +82,8 @@ button {
 }
 
 .item-score {
+  display: flex;
+  align-items: center;
   margin-top: 16px;
   font-size: 1.2rem;
 }
@@ -169,6 +172,12 @@ header .search-box > form > .search-button {
   text-indent: -1000rem;
   background: url("../../templates/search_button.png") transparent no-repeat 0 1px;
   background-size: contain;
+}
+
+.search-form-mobile {
+  & #search-input {
+    display: none;
+  }
 }
 
 .empty-result {
